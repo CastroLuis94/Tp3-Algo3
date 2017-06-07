@@ -27,7 +27,7 @@ int frontera(vector<int> &cliche, grafo& g ){
             vecinos.push_back(vecinos_local[j]);
         }
     }
-    return interseccion(cliche, vecinos).size();
+    return vecinos.size() - interseccion(cliche, vecinos).size();
 }
 
 
@@ -58,9 +58,9 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){//res = nodos de la chic
  int cliquesize = 0;
  vector<int> res;
  for(int i =0; i < maximales.size(); i++){
-    if((frontera(maximales[i], g) > maxfrontier) or maximales[i].size()-1 + maximasubchicle(maximales[i], g).size() > maxfrontier ){
-        if( (maximales[i].size()-1 + maximasubchicle(maximales[i], g).size()) > frontera(maximales[i], g) ){
-        maxfrontier = maximales[i].size() - 1 + maximasubchicle(maximales[i], g).size();
+    if((frontera(maximales[i], g) > maxfrontier) or /*maximales[i].size()-1 +*/ maximasubchicle(maximales[i], g).size() > maxfrontier ){
+        if( (/*maximales[i].size()-1 +*/ maximasubchicle(maximales[i], g).size()) > frontera(maximales[i], g) ){
+        maxfrontier = /*maximales[i].size() - 1*/ + maximasubchicle(maximales[i], g).size();
         cliquesize = (maximales[i]).size() -1;
         res = (maximasubchicle(maximales[i], g));
         }else{
@@ -75,13 +75,12 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){//res = nodos de la chic
 
 
 
-
 //Me niego a hacer algo tan negro.
-/*void sacar(vector<int>& P, it){
-    for(int i =0; i< P.size(); i++)
+void sacar(vector<int>& P, it){
+    for(int i =0; i< P.size(); i++){}
 
 }
-*/
+
 
 /*
 BronKerbosch3(G)://Vamos por el BronKerboch3
@@ -112,21 +111,60 @@ vector<set<int> >  BronKerbosch2(R,P,X){
            X := X ⋃ {v}
 */
 
-/*
 
-vector<int> frontera_maxima(grafo& g){
-    vector<int> nodos = nodes_by_degree(g);
-    for(int i =0; i < nodos.size(), i++){
-
+//Vamos a probar usando fuerza bruta.(Complejidad horrible)
+/*vector<int> frontera_maxima(grafo& g){
+	vector<vector<int> > cliches;    
+    for(int i =0; i < g.n(), i++){
+    	vector<int> vecinos = g.get_neigh(i);
+    	for(int j = 0; j < vecinos.size(); i++){//todos los de dos son cliches de n = 2.
+    		vector<int> actual;
+    		actual.push_back(i);
+    		actual.push_back(vecinos[j]);
+    		if(frontera(actual)> fronteramax){
+    		cliches.push_back(actual); //me acumulo todas las cliches de dos con maxima frontera
+    		}
+    	}
     }
+    int agregamos = 0;
+    for(int j =0; j< cliches.size(); j++){
+    	for(int l =0; l < g.get_neigh(cliques[j][0]).size(), l++){
+    		for(int m = 1; m < cliques[j].size(); m++){
+    			bool valido = true;	
+    			if(!esta(g.get_neigh(cliques[j][0])[l]), g.get_neigh(cliques[j][m])){
+    				valido = false;
+    				break;
+    			}
+    			if(valido and frontera(cliques, ))
+    		}
+    	}
+
+    	
+
+
+    } 
 
 }
-
 */
+bool escliche(grafo&g, vector<int> nodos){	//dado un conjunto de nodos, me dice si son clique
+	vector<int>  vecinos = g.get_neigh(nodos[0]);
+	for(int i =0; i < vecinos.size(); i++ ){
+		for(int j = 0; j < nodos.size(); j++){
+			if(!esta(vecinos[i], g.get_neigh(nodos[j]))){
+				return  false; 
+			}
+		}		
+	}
+	return true;
+}
 
 
 
-
+bool esta(int i, vector<int>& vect){
+	for(int i = 0; i < vect.size(); i++ ){
+		if()
+	}
+}
 
 int main(){
     int instancias;
