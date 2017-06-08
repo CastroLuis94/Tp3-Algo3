@@ -23,6 +23,10 @@ while(i < ejes):
 	G.add_edge(c1, c2,color=color)
 	i+=1
 
+j = 1
+while j <= nodos:
+    G.add_node(j)
+    j+=1
 
 edges = G.edges()
 
