@@ -85,7 +85,7 @@ bool esta(int v, vector<int>& nodos){
     }
     return false;
 }
-
+/*
 bool escliche(grafo&g, vector<int>& nodos){	//dado un conjunto de nodos, me dice si son clique	
     for(int i =0; i < nodos.size(); i++ ){
         if(g.get_neigh(nodos[i]).size() < nodos.size()-1){
@@ -93,18 +93,34 @@ bool escliche(grafo&g, vector<int>& nodos){	//dado un conjunto de nodos, me dice
         }
     }
     return true;
+}*/
+
+bool escliche(grafo&g, vector<int>& nodos){
+    for(int i =0; i < nodos.size(); i++){
+
+        if(g.get_neigh(nodos[i]).size() < nodos.size()-1){
+            return false;
+        }else{
+            for(int j = 0; j < nodos.size(); j++ ){
+                if( (nodos[j] != nodos[i]) and (esta(nodos[j], g.get_neigh(nodos[i])) == false)){
+                    return false;
+                }
+            }
+        }
+    }
+    
+    return true;
 }
-
-
 
 int frontera(grafo&g, vector<int>& nodos){
     int res = 0;
     int vertices = g.n();
     for(int i =0; i < vertices; i++){
-        if(! esta(i, nodos)){
+        if(esta(i, nodos) == false){            
             res++;
         } 
-    } 
+    }
+    return res; 
 
 }
 
@@ -125,7 +141,7 @@ vector<vector <int> > Conjunto_de_partes(int n){
             
             if(auxiliar >= (1<<j)){  
             //cout <<"paso"<< "i : " << i << "j :" << j<< endl;              
-                parte_enesima.push_back(j+1);
+                parte_enesima.push_back(j);
                 auxiliar = auxiliar -(1 << j); 
             }
         }
@@ -133,8 +149,8 @@ vector<vector <int> > Conjunto_de_partes(int n){
             res.push_back(parte_enesima);
         }
     }
-    vector<int> vacio;
-    res.push_back(vacio);
+    //vector<int> vacio;
+    //res.push_back(vacio);
     return res;
 }
 
@@ -148,11 +164,11 @@ vector<vector <int> > Conjunto_de_partes(int n){
 vector<int> frontera_maxima(grafo& g, int& maxfrontier){
     int nodos = g.n();//me da todos los nodos.
     vector<vector<int> > partes = Conjunto_de_partes(nodos);
-    int maxima_frontera = 0;
+    //int maxima_frontera = 0;
     vector<int> res;
-    for(int i = 0; i < partes.size(); i++ ){
-        if((escliche(g, partes[i])) and (frontera(g, partes[i]) > maxima_frontera)){
-            maxima_frontera = frontera(g, partes[i]);
+    for(int i = 0; i < partes.size(); i++ ){       
+        if((escliche(g, partes[i])) and (frontera(g, partes[i]) > maxfrontier)){        
+            maxfrontier = frontera(g, partes[i]);
             res = partes[i];
         }
     }
@@ -192,10 +208,28 @@ void mostrar(vector<vector<int> > vs){
 
 
 int main(){
+    grafo g(3);
+    g.add_edge(0,1);
+    g.add_edge(0,2);
+    g.add_edge(2,1);
+
+    int maxfrontier = 0;
+
+
+    frontera_maxima(g, maxfrontier);
+    cout << maxfrontier << endl;
+    /*vector<int> nodos;
+    nodos.push_back(0);
+    nodos.push_back(1);
+    nodos.push_back(2);*/
+    //cout << "esta" << esta(0, nodos)  <<endl;
+    //cout << frontera(g, nodos)<<endl;
+
+    
    // vector<vector <int> > res = Conjunto_de_partes(4);
    // mostrar(res);
 
-    int instancias;
+    /*int instancias;
     cin >> instancias;
     for(int i=0; i < instancias; i++){        
         grafo g = crear_grafo();
@@ -218,7 +252,7 @@ int main(){
         //deberia formar un tipo grafo con esto.
 
     }
-  
+  */
     cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
