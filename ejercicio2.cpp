@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "coloreo.h"//grafo representado como lista de adyacencias.
-
+/*
 void BronKerboch(vector<int>& P, vector<int>& R, vector<int>& X, vector<vector<int> >& maximales, grafo& g){    
     if( P.empty() and X.empty()){
         maximales.push_back(R);
@@ -58,9 +58,9 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){//res = nodos de la chic
  int cliquesize = 0;
  vector<int> res;
  for(int i =0; i < maximales.size(); i++){
-    if((frontera(maximales[i], g) > maxfrontier) or /*maximales[i].size()-1 +*/ maximasubchicle(maximales[i], g).size() > maxfrontier ){
-        if( (/*maximales[i].size()-1 +*/ maximasubchicle(maximales[i], g).size()) > frontera(maximales[i], g) ){
-        maxfrontier = /*maximales[i].size() - 1*/ + maximasubchicle(maximales[i], g).size();
+    if((frontera(maximales[i], g) > maxfrontier) or  maximasubchicle(maximales[i], g).size() > maxfrontier ){
+        if( ( maximasubchicle(maximales[i], g).size()) > frontera(maximales[i], g) ){
+        maxfrontier =  maximasubchicle(maximales[i], g).size();
         cliquesize = (maximales[i]).size() -1;
         res = (maximasubchicle(maximales[i], g));
         }else{
@@ -73,100 +73,128 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){//res = nodos de la chic
  return (res);
 }
 
-
+*/
 
 //Me niego a hacer algo tan negro.
-void sacar(vector<int>& P, it){
-    for(int i =0; i< P.size(); i++){}
 
+bool esta(int v, vector<int>& nodos){    
+    for(int i = 0; i < nodos.size(); i++){
+        if(nodos[i] == v){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool escliche(grafo&g, vector<int>& nodos){	//dado un conjunto de nodos, me dice si son clique	
+    for(int i =0; i < nodos.size(); i++ ){
+        if(g.get_neigh(nodos[i]).size() < nodos.size()-1){
+            return false;
+        }
+    }
+    return true;
 }
 
 
-/*
-BronKerbosch3(G)://Vamos por el BronKerboch3
-       P = V(G)
-       R = X = empty
-       for each vertex v in a degeneracy ordering of G:
-           BronKerbosch2(R ⋃ {v}, P ⋂ N(v), X ⋂ N(v))
-           P := P \ {v}
-           X := X ⋃ {v}
 
-
-vector<set<int> >  BronKerbosch2(R,P,X){
-    vector<set<int> > res;
-    if((empty(X)) and (empty(P))){
-        res.push_back(R);
-    }
-    u = P[0];
-
-    P = P - {v}
-    X = X 
-  }
-       if P and X are both empty:
-           report R as a maximal clique
-       choose a pivot vertex u in P ⋃ X
-       for each vertex v in P \ N(u):
-           BronKerbosch2(R ⋃ {v}, P ⋂ N(v), X ⋂ N(v))
-           P := P \ {v}
-           X := X ⋃ {v}
-*/
-
-
-//Vamos a probar usando fuerza bruta.(Complejidad horrible)
-/*vector<int> frontera_maxima(grafo& g){
-	vector<vector<int> > cliches;    
-    for(int i =0; i < g.n(), i++){
-    	vector<int> vecinos = g.get_neigh(i);
-    	for(int j = 0; j < vecinos.size(); i++){//todos los de dos son cliches de n = 2.
-    		vector<int> actual;
-    		actual.push_back(i);
-    		actual.push_back(vecinos[j]);
-    		if(frontera(actual)> fronteramax){
-    		cliches.push_back(actual); //me acumulo todas las cliches de dos con maxima frontera
-    		}
-    	}
-    }
-    int agregamos = 0;
-    for(int j =0; j< cliches.size(); j++){
-    	for(int l =0; l < g.get_neigh(cliques[j][0]).size(), l++){
-    		for(int m = 1; m < cliques[j].size(); m++){
-    			bool valido = true;	
-    			if(!esta(g.get_neigh(cliques[j][0])[l]), g.get_neigh(cliques[j][m])){
-    				valido = false;
-    				break;
-    			}
-    			if(valido and frontera(cliques, ))
-    		}
-    	}
-
-    	
-
-
+int frontera(grafo&g, vector<int>& nodos){
+    int res = 0;
+    int vertices = g.n();
+    for(int i =0; i < vertices; i++){
+        if(! esta(i, nodos)){
+            res++;
+        } 
     } 
 
 }
-*/
-bool escliche(grafo&g, vector<int> nodos){	//dado un conjunto de nodos, me dice si son clique
-	vector<int>  vecinos = g.get_neigh(nodos[0]);
-	for(int i =0; i < vecinos.size(); i++ ){
-		for(int j = 0; j < nodos.size(); j++){
-			if(!esta(vecinos[i], g.get_neigh(nodos[j]))){
-				return  false; 
-			}
-		}		
-	}
-	return true;
+
+
+
+vector<vector <int> > Conjunto_de_partes(int n){
+    vector<vector<int > > res;
+    for(int i = 0; i < (1 << n) ; i++){
+        vector<int> parte_enesima;
+        int auxiliar = i;
+        /*if((auxiliar%2) == 1){
+            parte_enesima.push_back(1);
+            auxiliar--;
+        }*/ //Ahora son todos pares.
+        for(int j  = n-1; j >= 0; j--){//puede ser que deba ser modificado
+            //cout << "i : " << i << "j :" << j<< endl;                      
+            //if(((auxiliar % (1 << j)) == 0) and (auxiliar > 0) and ((auxiliar == i) or ((auxiliar< i) and (auxiliar > 1) )) ){
+            
+            if(auxiliar >= (1<<j)){  
+            //cout <<"paso"<< "i : " << i << "j :" << j<< endl;              
+                parte_enesima.push_back(j+1);
+                auxiliar = auxiliar -(1 << j); 
+            }
+        }
+        if(!parte_enesima.empty()){             
+            res.push_back(parte_enesima);
+        }
+    }
+    vector<int> vacio;
+    res.push_back(vacio);
+    return res;
 }
 
 
 
-bool esta(int i, vector<int>& vect){
-	for(int i = 0; i < vect.size(); i++ ){
-		if()
-	}
+
+
+
+
+
+vector<int> frontera_maxima(grafo& g, int& maxfrontier){
+    int nodos = g.n();//me da todos los nodos.
+    vector<vector<int> > partes = Conjunto_de_partes(nodos);
+    int maxima_frontera = 0;
+    vector<int> res;
+    for(int i = 0; i < partes.size(); i++ ){
+        if((escliche(g, partes[i])) and (frontera(g, partes[i]) > maxima_frontera)){
+            maxima_frontera = frontera(g, partes[i]);
+            res = partes[i];
+        }
+    }
+return res;
+//La idea es esta. Veo las partes del grafo, y luego por cada parte veo si es cliche. Y luego por cada cliche veo su frontera y me quedo con la maxima.
 }
+
+void mostrar(vector<int> vs){
+    cout << "[";
+    int i = 0;
+    while(i < vs.size()){
+        cout << vs[i];
+        i++;
+        if(i < vs.size()){
+            cout << ",";
+        }
+    }
+    cout << "]" <<endl;
+}
+void mostrar(vector<vector<int> > vs){
+    cout << "[";
+    int i = 0;
+    while(i < vs.size()){
+        mostrar(vs[i]);
+        i++;
+        if(i < vs.size()){
+            cout << ",";
+        }
+    }
+    cout << "]"<<endl;
+}
+
+
+
+
+
+
 
 int main(){
+   // vector<vector <int> > res = Conjunto_de_partes(4);
+   // mostrar(res);
+
     int instancias;
     cin >> instancias;
     for(int i=0; i < instancias; i++){        
@@ -174,7 +202,7 @@ int main(){
         //Ahora deberia resolver el problema
         int maxfrontier = 0;
         cout<<  maxfrontier << frontera_maxima(g, maxfrontier).size() << endl;
-        for(int i = 0; i< frontera_maxima(g, maxfrontier).size(); i++){
+        for(int j = 0; j< frontera_maxima(g, maxfrontier).size(); j++){
             cout << frontera_maxima(g, maxfrontier)[i] << endl;
         }
         //la respuesta esta en una maximal, o en una sub de la maximal.
