@@ -97,7 +97,6 @@ bool escliche(grafo&g, vector<int>& nodos){	//dado un conjunto de nodos, me dice
 
 bool escliche(grafo&g, vector<int>& nodos){
     for(int i =0; i < nodos.size(); i++){
-
         if(g.get_neigh(nodos[i]).size() < nodos.size()-1){
             return false;
         }else{
@@ -201,17 +200,36 @@ void mostrar(vector<vector<int> > vs){
     cout << "]"<<endl;
 }
 
-
+vector< vector < int > > levantarAristas(int vertices,int cantAristas){
+    int i = 0;
+    vector < vector <int> > res;
+    res.resize(vertices + 1);
+    while(i < cantAristas){
+        int nodo1;
+        cin >> nodo1;
+        int nodo2;
+        cin >> nodo2;
+        res[nodo1].push_back(nodo2);
+        res[nodo2].push_back(nodo1);
+        i++;
+    }
+    return res;
+}
 
 
 
 
 
 int main(){
-    grafo g(3);
-    g.add_edge(0,1);
-    g.add_edge(0,2);
-    g.add_edge(2,1);
+    int vertices;
+    cin >> vertices;
+    int aristas;
+    cin >> aristas;
+    
+    vector< vector <int> > listaAdyacencia = levantarAristas(vertices,aristas);
+    mostrar(listaAdyacencia);
+    grafo g(listaAdyacencia);
+    
 
     int maxfrontier = 0;
 

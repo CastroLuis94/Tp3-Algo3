@@ -13,7 +13,9 @@ using namespace std;
 
 class grafo {
 public:
-	grafo(int n) : vecinos(n, vector<int>()){};
+	grafo(vector< vector<int> >& vs){
+		vecinos = vs;
+	}
 	void add_edge(int v1, int v2);
 	vector<int>& get_neigh(int v);
 	int n();
@@ -23,6 +25,8 @@ public:
 private:
 	vector< vector<int> > vecinos;
 };
+
+
 
 class coloreo {
 public:
@@ -56,6 +60,6 @@ public:
 	vector<int> color;
 };
 
-grafo crear_grafo();
+//grafo crear_grafo();
 
 #endif

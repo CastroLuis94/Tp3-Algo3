@@ -146,17 +146,17 @@ void coloreo::asignar_color(vector<int> vs, int c) {
 		color[v] = c;
 	}
 }
-
+/*
 grafo crear_grafo() {
 	char c, p;
 	string f;
 	int n, m, v1, v2;
-/*
+
 	for(cin >> c; c == 'c'; cin >> c) {
 		getline(cin, f);
 		//cout << c << endl;
 	}
-*/
+
 	cin >> p >> f >> n >> m;
 	grafo g = grafo(n);
 	for (int i = 0 ; i < m; ++i) {
@@ -166,4 +166,4 @@ grafo crear_grafo() {
 	}
 	return g;
 }
-
+*/
