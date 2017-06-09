@@ -32,5 +32,5 @@ def generador_grafo_completo(cant_nodos, porcentaje):
 
 if __name__ == "__main__":
     porcentaje = 0
-    nodos = 5
+    nodos = 8
     generador_grafo_completo(nodos, porcentaje)   
