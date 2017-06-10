@@ -114,11 +114,14 @@ bool escliche(grafo&g, vector<int>& nodos){
 int frontera(grafo&g, vector<int>& nodos){
     int res = 0;
     int vertices = g.n();
-    for(int i =0; i < vertices; i++){
-        
-        if(esta(i, nodos) == false){            
-            res++;
-        } 
+
+    for(int j =0; j< nodos.size(); j++ ){
+        for(int i =1; i < vertices+1; i++){        
+         if(((esta(i, g.get_neigh(nodos[j]))== true) and (esta(i, nodos) == false)) and(i != nodos[j])){ 
+                    
+             res++;
+         } 
+        }
     }
     return res; 
 
@@ -141,7 +144,7 @@ vector<vector <int> > Conjunto_de_partes(int n){
             
             if(auxiliar >= (1<<j)){  
             //cout <<"paso"<< "i : " << i << "j :" << j<< endl;              
-                parte_enesima.push_back(j);
+                parte_enesima.push_back(j+1);
                 auxiliar = auxiliar -(1 << j); 
             }
         }
@@ -167,7 +170,8 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){
     //int maxima_frontera = 0;
     vector<int> res;
     for(int i = 0; i < partes.size(); i++ ){       
-        if((escliche(g, partes[i])) and (frontera(g, partes[i]) > maxfrontier)){        
+        if((escliche(g, partes[i])) and (frontera(g, partes[i]) >= maxfrontier)){ 
+        cout << "llegue" << i <<endl;       
             maxfrontier = frontera(g, partes[i]);
             res = partes[i];
         }
@@ -222,6 +226,9 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 
 int main(){
+
+ 
+    
     int vertices;
     cin >> vertices;
     int aristas;
@@ -230,8 +237,9 @@ int main(){
     vector< vector <int> > listaAdyacencia = levantarAristas(vertices,aristas);
     //mostrar(listaAdyacencia);
     grafo g(listaAdyacencia);
-    
 
+    
+    //mostrar(Conjunto_de_partes());
     int maxfrontier = 0;
 
 
