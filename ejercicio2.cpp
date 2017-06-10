@@ -171,7 +171,7 @@ vector<int> frontera_maxima(grafo& g, int& maxfrontier){
     vector<int> res;
     for(int i = 0; i < partes.size(); i++ ){       
         if((escliche(g, partes[i])) and (frontera(g, partes[i]) >= maxfrontier)){ 
-        cout << "llegue" << i <<endl;       
+       // cout << "llegue" << i <<endl;       
             maxfrontier = frontera(g, partes[i]);
             res = partes[i];
         }
@@ -181,16 +181,14 @@ return res;
 }
 
 void mostrar(vector<int> vs){
-    cout << "[";
     int i = 0;
     while(i < vs.size()){
-        cout << vs[i];
+        cout << vs[i] << " ";
         i++;
-        if(i < vs.size()){
+        /*if(i < vs.size()){
             cout << ",";
-        }
+        }*/
     }
-    cout << "]" <<endl;
 }
 void mostrar(vector<vector<int> > vs){
     cout << "[";
@@ -245,7 +243,7 @@ int main(){
 
     vector <int> res = frontera_maxima(g, maxfrontier);
     cout << maxfrontier << " ";
-    cout << res.size();
+    cout << res.size() << " ";
     mostrar(res);
     /*vector<int> nodos;
     nodos.push_back(0);
@@ -282,6 +280,6 @@ int main(){
 
     }
   */
-    cout << "Fin de la ejecucion del algoritmo." << endl;
+   // cout << "Fin de la ejecucion del algoritmo." << endl;
     return 0;
 }
