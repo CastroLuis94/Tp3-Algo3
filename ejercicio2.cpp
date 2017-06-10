@@ -115,6 +115,7 @@ int frontera(grafo&g, vector<int>& nodos){
     int res = 0;
     int vertices = g.n();
     for(int i =0; i < vertices; i++){
+        
         if(esta(i, nodos) == false){            
             res++;
         } 
@@ -227,15 +228,17 @@ int main(){
     cin >> aristas;
     
     vector< vector <int> > listaAdyacencia = levantarAristas(vertices,aristas);
-    mostrar(listaAdyacencia);
+    //mostrar(listaAdyacencia);
     grafo g(listaAdyacencia);
     
 
     int maxfrontier = 0;
 
 
-    frontera_maxima(g, maxfrontier);
-    cout << maxfrontier << endl;
+    vector <int> res = frontera_maxima(g, maxfrontier);
+    cout << maxfrontier << " ";
+    cout << res.size();
+    mostrar(res);
     /*vector<int> nodos;
     nodos.push_back(0);
     nodos.push_back(1);
