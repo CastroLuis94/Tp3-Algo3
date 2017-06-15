@@ -76,21 +76,27 @@ vector<int> grafo::nodes_by_degree() {
 	iota(nodos.begin(), nodos.end(), 0);
 	sort(nodos.begin(), nodos.end(), 
 		[&] (int v, int w) {
-			return this->get_neigh(v).size() < this->get_neigh(w).size();
+			/*cout << get_neigh(v).size() << "del nodo " << v <<endl;
+			cout << get_neigh(w).size() << "del nodo " << w <<endl;
+			*/
+			return this->get_neigh(v+1).size() < this->get_neigh(w+1).size();
 		}
 	);
 	return nodos;
 }
 
 void grafo::add_to_clique(int v1){
+	
 	if (vecinos.size() <= v1){
 		vecinos.resize(v1 + 1);
 	}
 	int i = 0;
+	
 	while(i < axis.size()){
- 		add_edge(axis[i],v1);
+ 		add_edge(axis.at(i),v1);
 		i++;
 	}
+	//cout << "llegue hasta aca" << endl;
 	axis.push_back(v1);
 }
 

@@ -88,32 +88,38 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 vector <int> constructiva(grafo g, int& maxfrontera){
     vector <int> nodoPorGrado = g.nodes_by_degree();
-    int maximoNodo = nodoPorGrado[0] + 1 ;
+    int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
     maxfrontera = g.degree(maximoNodo);
     vector <int> nodosDisponibles = g.get_neigh(maximoNodo);
-    //cout << maxfrontera << endl;
+    /*int i = 0;
+    while(i < nodoPorGrado.size()){
+        cout << "imprimiento nodo" << endl;
+        cout << nodoPorGrado[i]+1 << endl;
+        cout << "imprimiento grado del nodo" << endl;
+         cout << (g.degree(nodoPorGrado[i]+1)) << endl;
+         i++;
+    }
+   */
     //cout << maximoNodo << endl;
     //mostrar(nodosDisponibles);
     vector <vector < int > > aux;
     vector <int> nodos;
     //cout << "yolo2" <<endl;
     nodos.push_back(maximoNodo);
-    aux.resize(maximoNodo);
+    aux.resize(maximoNodo + 1);
     // cout << "yolo3" <<endl;
     grafo mejorClique(aux,nodos);
    
     //mostrar(mejorClique.ejes());
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
-    
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
         while(i < nodosDisponibles.size()){
-            //cout << "yolo4" <<endl;
-            if (g.degree(nodosDisponibles[i]) > maximoGrado and not esta1(grafoActual.ejes(),nodosDisponibles[i])){
-                nodoAAgregar = nodosDisponibles[i];
-                maximoGrado = g.degree(nodosDisponibles[i]);
+            if (g.degree(nodosDisponibles.at(i)) > maximoGrado and not esta1(grafoActual.ejes(),nodosDisponibles.at(i))){
+                nodoAAgregar = nodosDisponibles.at(i);
+                maximoGrado = g.degree(nodosDisponibles.at(i));
             }
             i++;
         }
