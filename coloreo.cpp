@@ -8,16 +8,55 @@
 
 using namespace std;
 
+bool esta(vector<int>& nodos,int v){    
+    for(int i = 0; i < nodos.size(); i++){
+        if(nodos[i] == v){
+            return true;
+        }
+    }
+    return false;
+}
+
+grafo::grafo(vector< vector<int> >& vs){
+		vecinos = vs;
+		int i = 0;
+		vector<int> ejes;
+		while(i < vs.size()){
+			int k = 0;
+			while(k < vs[i].size()){
+				if(not esta(axis,vs[i][k])){
+					ejes.push_back(vs[i][k]);
+				}
+				k++;
+			}
+			i++;
+		}
+		axis = ejes;
+}
+
 void grafo::add_edge(int v1, int v2) {
 	vecinos[v1].push_back(v2);
 	vecinos[v2].push_back(v1);
 }
-
+vector<int> grafo::ejes() {
+	return axis;
+}
+void grafo::add_axis(int v1) {
+	vector <int> vacio;
+	while(vecinos.size() < v1){
+		vecinos.push_back(vacio);
+	}
+	axis.push_back(v1);
+}
 vector<int>& grafo::get_neigh(int v) {
 	// for (auto w : vecinos[v])
 	// 	cout << w;
 	// cout << endl;
 	return vecinos[v];
+}
+
+int grafo::degree(int nodo){
+	return (get_neigh(nodo)).size();
 }
 
 int grafo::n() {
@@ -43,25 +82,15 @@ vector<int> grafo::nodes_by_degree() {
 	return nodos;
 }
 
-
-/*
-grafo crear_grafo() {
-	char c, p;
-	string f;
-	int n, m, v1, v2;
-
-	for(cin >> c; c == 'c'; cin >> c) {
-		getline(cin, f);
-		//cout << c << endl;
+void grafo::add_to_clique(int v1){
+	if (vecinos.size() <= v1){
+		vecinos.resize(v1 + 1);
 	}
-
-	cin >> p >> f >> n >> m;
-	grafo g = grafo(n);
-	for (int i = 0 ; i < m; ++i) {
-		cin >> c >> v1 >> v2;
-		//cout << c << v1 << v2 << endl;
-		g.add_edge(v1-1, v2-1);
+	int i = 0;
+	while(i < axis.size()){
+ 		add_edge(axis[i],v1);
+		i++;
 	}
-	return g;
+	axis.push_back(v1);
 }
-*/
+

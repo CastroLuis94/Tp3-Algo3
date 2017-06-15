@@ -189,6 +189,7 @@ void mostrar(vector<int> vs){
             cout << ",";
         }*/
     }
+    cout << "" <<endl;
 }
 void mostrar(vector<vector<int> > vs){
     cout << "[";
