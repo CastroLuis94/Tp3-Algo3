@@ -120,6 +120,9 @@ vector <int> grasp(grafo g, int& maxfrontera){
     int gradoTotal = g.degrees();
     vector <pair<int , float> > listaNodosYProbabilidades = calcularProbabilidades(g,gradoTotal);
     int nodoElegido = elegiUno(listaNodosYProbabilidades);
+    if(nodoElegido == 0){
+        nodoElegido++;
+    }
     vector <vector < int > > aux;
     vector <int> nodos;
     //cout << "yolo2" <<endl;
@@ -141,14 +144,8 @@ vector <int> grasp(grafo g, int& maxfrontera){
                 maximoGrado = g.degree(nodosDisponibles.at(i));
             }
             i++;
-        }
-        
+        }    
         grafoActual.add_to_clique(nodoAAgregar);
-        /*mostrar(grafoActual.ejes());
-        cout << "valores de las fronteras" <<endl;
-        cout << frontera(grafoActual,g) <<endl;
-         cout << maxfrontera <<endl;
-        */
         if (maxfrontera < frontera(grafoActual,g)){
             mejorClique = grafoActual;
             maxfrontera = frontera(grafoActual,g);
