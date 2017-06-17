@@ -19,16 +19,10 @@ bool esta(vector<int>& nodos,int v){
 
 grafo::grafo(vector< vector<int> >& vs){
 		vecinos = vs;
-		int i = 0;
+		int i = 1;
 		vector<int> ejes;
 		while(i < vs.size()){
-			int k = 0;
-			while(k < vs[i].size()){
-				if(not esta(axis,vs[i][k])){
-					ejes.push_back(vs[i][k]);
-				}
-				k++;
-			}
+			ejes.push_back(i);
 			i++;
 		}
 		axis = ejes;

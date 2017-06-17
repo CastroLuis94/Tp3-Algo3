@@ -11,6 +11,7 @@ int elegiUno(vector< pair <int,float > > nodos){
         //cout << chosen <<endl;
         float current = 0;
         int i = 0;
+        
         while(i < nodos.size()){
             //cout << current <<endl;
             //cout << nodos[i].second <<endl;
@@ -107,8 +108,7 @@ vector <pair<int , float> > calcularProbabilidades(grafo& g,int gradoTotal){
     vector <int> ejes = g.ejes();
     int i = 0;
     while(i < ejes.size()){
-        float probabilidad = (float)(g.degree(ejes[i]))/gradoTotal;
-        
+        float probabilidad = (float)(g.degree(ejes[i]))/gradoTotal; 
         res.push_back(make_pair(ejes[i],probabilidad));
         i++;
     }
@@ -118,10 +118,12 @@ vector <pair<int , float> > calcularProbabilidades(grafo& g,int gradoTotal){
 vector <int> grasp(grafo g, int& maxfrontera){
     vector <int> listaNodos = g.ejes();
     int gradoTotal = g.degrees();
-    vector <pair<int , float> > listaNodosYProbabilidades = calcularProbabilidades(g,gradoTotal);
-    int nodoElegido = elegiUno(listaNodosYProbabilidades);
-    if(nodoElegido == 0){
-        nodoElegido++;
+    int nodoElegido;
+    if (gradoTotal > 0){
+        vector <pair<int , float> > listaNodosYProbabilidades = calcularProbabilidades(g,gradoTotal);
+        nodoElegido = elegiUno(listaNodosYProbabilidades);
+    }else{
+        nodoElegido = rand() % (listaNodos.size());
     }
     vector <vector < int > > aux;
     vector <int> nodos;
@@ -129,12 +131,14 @@ vector <int> grasp(grafo g, int& maxfrontera){
     nodos.push_back(nodoElegido);
     aux.resize(nodoElegido + 1);
     // cout << "yolo3" <<endl;
+    
     grafo mejorClique(aux,nodos);
    
     //mostrar(mejorClique.ejes());
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
     vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
+    
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
@@ -152,6 +156,7 @@ vector <int> grasp(grafo g, int& maxfrontera){
         }
         nodosDisponibles = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
     }
+     
     return mejorClique.ejes();
 }
 

@@ -88,9 +88,6 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 vector <int> grasp(grafo g, int& maxfrontera){
     vector <int> listaNodos = g.ejes();
-    if (listaNodos.size() == 0){
-        listaNodos.push_back(1);
-    }
     int indiceNodoElegido = rand() % (listaNodos.size());
     int nodoElegido = listaNodos[indiceNodoElegido];
     maxfrontera = g.degree(nodoElegido);
