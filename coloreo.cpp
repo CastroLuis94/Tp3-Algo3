@@ -59,6 +59,16 @@ int grafo::degree(int nodo){
 	return (get_neigh(nodo)).size();
 }
 
+int grafo::degrees(){
+	int i = 0;
+	int res = 0;
+	while(i < axis.size()){
+		res += degree(axis[i]);
+		i++;
+	}
+	return res;
+}
+
 int grafo::n() {
 	return vecinos.size() -1 ;//numerados del 1 a n
 }

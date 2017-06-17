@@ -23,6 +23,7 @@ public:
 		vecinos = other.vecinos;
 		axis = other.axis;
 	}
+	int degrees();
 	void add_edge(int v1, int v2);
 	void add_axis(int v1);
 	vector <int> ejes();

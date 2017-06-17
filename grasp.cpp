@@ -2,7 +2,7 @@
 #include <ostream>
 #include <vector>
 #include <stdio.h>
-
+#include <stdlib.h> 
 #include "coloreo.h"
 
 
@@ -86,16 +86,32 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
     return res;
 }
 
-vector <int> constructiva(grafo g, int& maxfrontera){
-    vector <int> nodoPorGrado = g.nodes_by_degree();
-    int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
-    maxfrontera = g.degree(maximoNodo);
-    vector <int> nodosDisponibles = g.get_neigh(maximoNodo);
+vector <int> grasp(grafo g, int& maxfrontera){
+    vector <int> listaNodos = g.ejes();
+    int indiceNodoElegido = rand() % (listaNodos.size());
+    int nodoElegido = listaNodos[indiceNodoElegido];
+    maxfrontera = g.degree(nodoElegido);
+    vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
+    /*int i = 0;
+    while(i < nodoPorGrado.size()){
+        cout << "imprimiento nodo" << endl;
+        cout << nodoPorGrado[i]+1 << endl;
+        cout << "imprimiento grado del nodo" << endl;
+         cout << (g.degree(nodoPorGrado[i]+1)) << endl;
+         i++;
+    }
+   */
+    //cout << maximoNodo << endl;
+    //mostrar(nodosDisponibles);
     vector <vector < int > > aux;
     vector <int> nodos;
-    nodos.push_back(maximoNodo);
-    aux.resize(maximoNodo + 1);
+    //cout << "yolo2" <<endl;
+    nodos.push_back(nodoElegido);
+    aux.resize(nodoElegido + 1);
+    // cout << "yolo3" <<endl;
     grafo mejorClique(aux,nodos);
+   
+    //mostrar(mejorClique.ejes());
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
     while (nodosDisponibles.size() > 0 ){
@@ -110,6 +126,11 @@ vector <int> constructiva(grafo g, int& maxfrontera){
         }
         
         grafoActual.add_to_clique(nodoAAgregar);
+        /*mostrar(grafoActual.ejes());
+        cout << "valores de las fronteras" <<endl;
+        cout << frontera(grafoActual,g) <<endl;
+         cout << maxfrontera <<endl;
+        */
         if (maxfrontera < frontera(grafoActual,g)){
             mejorClique = grafoActual;
             maxfrontera = frontera(grafoActual,g);
@@ -139,7 +160,7 @@ int main(){
     int maxfrontera = 0;
 
 
-    vector <int> res = constructiva(g,maxfrontera);
+    vector <int> res = grasp(g,maxfrontera);
     //cout << "yolo" <<endl;
     cout << maxfrontera << " ";
     cout << res.size() << " ";

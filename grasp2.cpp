@@ -2,9 +2,25 @@
 #include <ostream>
 #include <vector>
 #include <stdio.h>
-
+#include <stdlib.h> 
 #include "coloreo.h"
 
+
+int elegiUno(vector< pair <int,float > > nodos){
+        float chosen = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        //cout << chosen <<endl;
+        float current = 0;
+        int i = 0;
+        while(i < nodos.size()){
+            //cout << current <<endl;
+            //cout << nodos[i].second <<endl;
+            current += nodos[i].second;
+            if (current >= chosen){
+                return nodos[i].first;
+            }
+            i++;
+        }
+    }
 
 
 bool esta1(vector<int> nodos,int v){    
@@ -86,18 +102,36 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
     return res;
 }
 
-vector <int> constructiva(grafo g, int& maxfrontera){
-    vector <int> nodoPorGrado = g.nodes_by_degree();
-    int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
-    maxfrontera = g.degree(maximoNodo);
-    vector <int> nodosDisponibles = g.get_neigh(maximoNodo);
+vector <pair<int , float> > calcularProbabilidades(grafo& g,int gradoTotal){
+    vector < pair<int,float> > res;
+    vector <int> ejes = g.ejes();
+    int i = 0;
+    while(i < ejes.size()){
+        float probabilidad = (float)(g.degree(ejes[i]))/gradoTotal;
+        
+        res.push_back(make_pair(ejes[i],probabilidad));
+        i++;
+    }
+    return res;
+}
+
+vector <int> grasp(grafo g, int& maxfrontera){
+    vector <int> listaNodos = g.ejes();
+    int gradoTotal = g.degrees();
+    vector <pair<int , float> > listaNodosYProbabilidades = calcularProbabilidades(g,gradoTotal);
+    int nodoElegido = elegiUno(listaNodosYProbabilidades);
     vector <vector < int > > aux;
     vector <int> nodos;
-    nodos.push_back(maximoNodo);
-    aux.resize(maximoNodo + 1);
+    //cout << "yolo2" <<endl;
+    nodos.push_back(nodoElegido);
+    aux.resize(nodoElegido + 1);
+    // cout << "yolo3" <<endl;
     grafo mejorClique(aux,nodos);
+   
+    //mostrar(mejorClique.ejes());
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
+    vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
@@ -110,6 +144,11 @@ vector <int> constructiva(grafo g, int& maxfrontera){
         }
         
         grafoActual.add_to_clique(nodoAAgregar);
+        /*mostrar(grafoActual.ejes());
+        cout << "valores de las fronteras" <<endl;
+        cout << frontera(grafoActual,g) <<endl;
+         cout << maxfrontera <<endl;
+        */
         if (maxfrontera < frontera(grafoActual,g)){
             mejorClique = grafoActual;
             maxfrontera = frontera(grafoActual,g);
@@ -139,7 +178,7 @@ int main(){
     int maxfrontera = 0;
 
 
-    vector <int> res = constructiva(g,maxfrontera);
+    vector <int> res = grasp(g,maxfrontera);
     //cout << "yolo" <<endl;
     cout << maxfrontera << " ";
     cout << res.size() << " ";
