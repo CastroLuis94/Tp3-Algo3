@@ -28,13 +28,30 @@ grafo::grafo(vector< vector<int> >& vs){
 		axis = ejes;
 }
 
+void grafo::del_from_clique(int v1) {
+	axis.erase(remove(axis.begin(),axis.end(), v1), axis.end());
+	for (int i = 0; i < axis.size() + 1; ++i){
+		if(esta(vecinos[i],v1)){
+			vecinos[i].erase(remove(vecinos[i].begin(),vecinos[i].end(), v1), vecinos[i].end());
+		}
+	}
+}
+
 void grafo::add_edge(int v1, int v2) {
-	vecinos[v1].push_back(v2);
-	vecinos[v2].push_back(v1);
+	if (not esta(vecinos[v1],v2)){
+		vecinos[v1].push_back(v2);
+	}
+	if (not esta(vecinos[v2],v1)){
+		vecinos[v2].push_back(v1);
+	}
 }
 vector<int> grafo::ejes() {
 	return axis;
 }
+int grafo::tamano() {
+	return axis.size();
+}
+
 void grafo::add_axis(int v1) {
 	vector <int> vacio;
 	while(vecinos.size() < v1){

@@ -30,10 +30,12 @@ public:
 	vector<int>& get_neigh(int v);
 	int n();
 	void print();
+	int tamano();
 	// nodos ordenados por grado
 	vector<int> nodes_by_degree();
 	int degree(int nodo);
 	void add_to_clique(int v1);
+	void del_from_clique(int v1);
 private:
 	vector< vector<int> > vecinos;
 	vector <int> axis;
