@@ -145,12 +145,13 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
     tuple <int, int, bool> aux2;
     vector< tuple< int, int,bool > > guardar;
     int contador = 0;
+    cout << "yolo1" <<endl;
     while (contador < g.tamano()*2){
         while (cont < nodosDisponibles.size()){
             flag = false;
             grafoaux.add_to_clique(nodosDisponibles.at(cont));
             if (guardar.size() < 5){
-                if(frontera(grafoaux,g) > maxfrontera){
+                if(frontera(grafoaux,g) >= maxfrontera){
                     aux2 = make_tuple(cont,frontera(grafoaux,g),true);
                     guardar.push_back(aux2);
                 }
@@ -172,6 +173,7 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
             grafoaux.del_from_clique(nodosDisponibles.at(cont));
             cont ++;
         }
+        cout << "yolo2" <<endl;
         cont = 0;
         while (cont < grafoaux.tamano()) {
             nodoAeliminar = grafoaux.ejes()[0];
@@ -201,34 +203,23 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
             grafoaux.add_to_clique(nodoAeliminar);
             cont ++;
         }
-        int indice = rand() % guardar.size();
-        aux2 = guardar[indice];
-
-
-        if (get<2>(aux2))
-        {
-          grafoaux.add_to_clique(get<0>(aux2));
-          maxfrontera = get<1>(aux2);  
-        }
-        else
-        {
-            grafoaux.del_from_clique(get<0>(aux2));
-            maxfrontera = get<1>(aux2);
+        
+        if(guardar.size() > 0){
+            int indice = rand() % guardar.size();
+            aux2 = guardar[indice];
+            if (get<2>(aux2))
+            {
+            grafoaux.add_to_clique(get<0>(aux2));
+            maxfrontera = get<1>(aux2);  
+            }
+            else
+            {
+                grafoaux.del_from_clique(get<0>(aux2));
+                maxfrontera = get<1>(aux2);
+            }
         }
         ++contador;
-       /* if (mayorCreciente >= maxfrontera and mayorCreciente >= mayorDecreciente){
-            grafoaux.add_to_clique(nodosDisponibles.at(nodomayorCreciente));
-            maxfrontera = mayorCreciente;
-        }
-        else if (mayorDecreciente >= maxfrontera) {
-                grafoaux.del_from_clique(nodomayorDecreciente);
-                maxfrontera = mayorDecreciente;
-        }
-        else {
-
-            fin = true;
-        }
-        */
+       cout << "yolo4" <<endl;
     }
 
     return grafoaux.ejes();
@@ -253,6 +244,7 @@ vector <int> grasp(grafo g, int& maxfrontera){
     int nodoAAgregar;
     vector<int> nodosDisponiblesAux;
     grafo grafoActualAux = grafoActual;
+    cout << "yolo" <<endl;
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
@@ -277,9 +269,12 @@ vector <int> grasp(grafo g, int& maxfrontera){
         nodosDisponibles = nodosDisponiblesAux;
     }
     vector<vector<int> > basura;
-   
-    grafoActualAux = grafo(busquedalocal(grafoActual,g,maxfrontera));
-
+     
+     int j = 0;
+     vector<int> paraElGrafo = busquedalocal(grafoActual,g,j);
+    //cout << "yolo2" <<endl;
+    grafoActualAux = grafo(paraElGrafo);
+     //cout << "yolo3" <<endl;
     return grafoActual.ejes();
 }
 
