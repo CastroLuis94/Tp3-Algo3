@@ -201,10 +201,145 @@ vector<vector <int> > Conjunto_de_partes(int n){
     return res;
 }
 
+int minimaFrontera(vector< pair< grafo, int > >& respuestas){
+    int i = 0;
+    int minimo = respuestas[0].second;
+    while(i < respuestas.size()){
+        if(minimo < respuestas[i].second){
+            minimo = respuestas[i].second;
+        }
+        i++;
+    }
+    return minimo;
+}
 
 
 
+vector< pair< grafo, int > >& actualizarRespuestas(vector< pair< grafo, int > >& respuestas, grafo& g,int frontera,int tamanioMaximoDeseado){
+    int minimo = minimaFrontera(respuestas);
+    vector< pair< grafo, int > > aux;
+    if (respuestas.size() >= tamanioMaximoDeseado){
+        if(minimo < frontera){
+            int i = 0;
+            bool yaSaqueUno = false;
+            while(i < respuestas.size()){
+                if(respuestas[i].second != minimo){
+                    if(yaSaqueUno){
+                        aux.push_back(respuestas[i]);
+                    }
+                }else{
+                yaSaqueUno = true;
+                }
+                i++;
+            }
+            aux.push_back(make_pair(g,frontera));
+            respuestas = aux;
+            return respuestas;
+        }
+    }else{
+        respuestas.push_back(make_pair(g,frontera));
+    }
+    return respuestas;
 
+}
+
+
+vector <int> busquedalocal1(grafo original,grafo g, int& maxfrontera){
+    vector <int> listaNodos = g.ejes();
+    vector <int> nodosDisponibles;
+    vector <int> nodos;
+     vector <vector <int> > aux;
+    grafo mejorClique(aux,nodos);
+    grafo grafoActual(aux,nodos);
+    int nodoAAgregar;
+    int cont = 0;
+    grafo grafoaux(aux,grafoActual.ejes());
+    grafoaux = grafoActual;
+    bool fin = false;
+    bool flag = false;
+    int nodoAeliminar;
+    tuple <int, int, bool> aux2;
+    vector< tuple< int, int,bool > > guardar;
+    int contador = 0;
+    cout << "yolo1" <<endl;
+    while (contador < g.tamano()*2){
+        while (cont < nodosDisponibles.size()){
+            flag = false;
+            grafoaux.add_to_clique(nodosDisponibles.at(cont));
+            if (guardar.size() < 5){
+                if(frontera(grafoaux,g) >= maxfrontera){
+                    aux2 = make_tuple(cont,frontera(grafoaux,g),true);
+                    guardar.push_back(aux2);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < guardar.size() and flag == false ; ++i)
+                {
+                    if (frontera(grafoaux,g) > get<2>(guardar[i]) )
+                    {
+                        //aux2 = make_tuple(cont,frontera(grafoaux,g),true);
+                        get<0>(guardar[i]) = cont;
+                        get<1>(guardar[i]) = frontera(grafoaux,g);
+                        get<2>(guardar[i]) = true;
+                        flag = true;
+                    }
+                }
+            }
+            grafoaux.del_from_clique(nodosDisponibles.at(cont));
+            cont ++;
+        }
+        cout << "yolo2" <<endl;
+        cont = 0;
+        while (cont < grafoaux.tamano()) {
+            nodoAeliminar = grafoaux.ejes()[0];
+            flag = false;
+            grafoaux.del_from_clique(nodoAeliminar);
+             if (guardar.size() < 5){
+                if(frontera(grafoaux,g) > maxfrontera){
+                    aux2 = make_tuple(nodoAeliminar,frontera(grafoaux,g),false);
+                    guardar.push_back(aux2);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < guardar.size() and flag == false ; ++i)
+                {
+                    if (frontera(grafoaux,g) > get<2>(guardar[i]) )
+                    {
+                        //aux2 = make_tuple(nodoAeliminar,frontera(grafoaux,g),false);
+                        //guardar.push_back(aux2);
+                        get<0>(guardar[i]) = nodoAeliminar;
+                        get<1>(guardar[i]) = frontera(grafoaux,g);
+                        get<2>(guardar[i]) = false;
+                        flag = true;
+                    }
+                }
+            }
+            grafoaux.add_to_clique(nodoAeliminar);
+            cont ++;
+        }
+        
+        if(guardar.size() > 0){
+            int indice = rand() % guardar.size();
+            aux2 = guardar[indice];
+            if (get<2>(aux2))
+            {
+            grafoaux.add_to_clique(get<0>(aux2));
+            maxfrontera = get<1>(aux2);  
+            }
+            else
+            {
+                grafoaux.del_from_clique(get<0>(aux2));
+                maxfrontera = get<1>(aux2);
+            }
+        }
+        ++contador;
+       cout << "yolo4" <<endl;
+    }
+
+    return grafoaux.ejes();
+}
 
 
 
@@ -374,36 +509,84 @@ grafo constructiva_adaptativa(grafo g, int& maxfrontera){
 
 
 
+vector <int> grasp_1(grafo g, int& maxfrontera){
+    vector <int> listaNodos = g.ejes();
+    int indiceNodoElegido = rand() % (listaNodos.size());
+    int nodoElegido = listaNodos[indiceNodoElegido];
+    maxfrontera = g.degree(nodoElegido);
+    vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
+    vector <vector < int > > aux;
+    vector <int> nodos;
+    nodos.push_back(nodoElegido);
+    aux.resize(nodoElegido + 1);
+    grafo mejorClique(aux,nodos);
+    grafo grafoActual(aux,nodos);
+    int nodoAAgregar;
+    vector<int> nodosDisponiblesAux;
+    grafo grafoActualAux = grafoActual;
+    cout << "yolo" <<endl;
+    while (nodosDisponibles.size() > 0 ){
+        int i = 0;
+        int maximoGrado = 0;
+        grafo copia = grafoActual;
+        while(i < nodosDisponibles.size()){
+            int nodoAAgregar = nodosDisponibles[i];
+            grafoActualAux = grafoActual;
+            copia.add_to_clique(nodoAAgregar);
+            int fronteraDeLaCopia = frontera(copia,g);
+            if (fronteraDeLaCopia >= maxfrontera){
+                nodosDisponiblesAux = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
+                maxfrontera = fronteraDeLaCopia;
+                grafoActualAux = copia;
+            }
+            i++;
+            copia.del_special();
+        }
+        if(nodosDisponibles.size() == nodosDisponiblesAux.size()){
+            break;
+        }
+        grafoActual = grafoActualAux;
+        nodosDisponibles = nodosDisponiblesAux;
+    }
+    vector<vector<int> > basura;
+     
+     int j = 0;
+     vector<int> paraElGrafo = busquedalocal1(grafoActual,g,j);
+    //cout << "yolo2" <<endl;
+    grafoActualAux = grafo(paraElGrafo);
+     //cout << "yolo3" <<endl;
+    return grafoActual.ejes();
+}
 
 
 int main(){
 
 	int exacto;	
-	constexpr rep tiempo_exacto;
+	//constexpr rep tiempo_exacto;
 	int greedy_no_ad;
-	constexpr rep tiempo_greedy_no_ad;
+	//constexpr rep tiempo_greedy_no_ad;
 	int greedy_ad;
-	constexpr rep tiempo_greedy_ad;
+	//constexpr rep tiempo_greedy_ad;
 	int no_greedy;
-	constexpr rep tiempo_no_greedy;
+	//constexpr rep tiempo_no_greedy;
 	int local;
-	constexpr rep tiempo_local;
+	//constexpr rep tiempo_local;
 	int grasp;
-	constexpr rep tiempo_grasp;
+	//constexpr rep tiempo_grasp;
 
 	cout << "exacto, tiempo_e, greedy_no_ad, tiempo_gna, greedy_ad, tiempo_ga, no_greedy, tiempo_ng, local, tiempo_local, grasp, tiempo_grasp\n";
 	while(true){
 		int cantNodos;			
 		int cantAristas;
-		cin << cantNodos << cantAristas;
+		cin >> cantNodos >> cantAristas;
 		if((cantNodos == -1) and (cantAristas == -1)){
 			break;
 		}
-		vector< vector <int> > listaAdyacencia = levantarAristas(vertices,aristas);    	
+		vector< vector <int> > listaAdyacencia = levantarAristas(cantNodos,cantAristas);    	
    		grafo g(listaAdyacencia);
    		int maxfrontier = 0;
    		auto start = ya();  
-   		vector <int> res = frontera_maxima(g, maxfrontier);  
+   		vector <int> reso = frontera_maxima(g, maxfrontier);  
     	auto end = ya();
     	exacto = (maxfrontier);
     	//tiempo_exacto = (chrono::duration_cast<chrono::nanoseconds>(end-start).count()); 
@@ -417,28 +600,28 @@ int main(){
     	cout << greedy_no_ad << ";" <<  chrono::duration_cast<chrono::nanoseconds>(end2-start2).count() << ";";
     	maxfrontier = 0;
     	auto start3 = ya();
-    	grafo res = constructiva_adaptativa(g,maxfrontier);
+    	res = constructiva_adaptativa(g,maxfrontier);
     	auto end3 =  ya();
     	greedy_ad = (maxfrontier);
     	//tiempo_greedy_ad = (chrono::duration_cast<chrono::nanoseconds>(end3-start3).count());
     	cout << greedy_ad << ";" << chrono::duration_cast<chrono::nanoseconds>(end3-start3).count() << ";";
     	maxfrontier = 0;
     	auto start4 = ya();
-    	grafo res = constructiva_no_greedy(g,maxfrontier);
+    	res = constructiva_no_greedy(g,maxfrontier);
     	auto end4 =  ya();
     	no_greedy = (maxfrontier);
     	//tiempo_no_greedy = (chrono::duration_cast<chrono::nanoseconds>(end4-start4).count());
     	cout << greedy_ad << ";" << chrono::duration_cast<chrono::nanoseconds>(end4-start4).count() << ";";
     	maxfrontier = 0;
     	auto start5 = ya();
-    	grafo res = busquedalocal(g,maxfrontier);
+    	res = busquedalocal(g,maxfrontier);
     	auto end5 =  ya();
     	local =(maxfrontier);
     	//tiempo_local = (chrono::duration_cast<chrono::nanoseconds>(end5-start5).count());
     	cout << local << ";" << chrono::duration_cast<chrono::nanoseconds>(end5-start5).count() << ";";
     	maxfrontier = 0;
-    	auto start6 = ya();
-    	grafo res = grasp(g,maxfrontier);
+    	auto start6 = ya();        
+    	res = grasp_1(g,maxfrontier);
     	auto end6 =  ya();
     	grasp = maxfrontier;
     	//tiempo_grasp = (chrono::duration_cast<chrono::nanoseconds>(end6-start6).count());
