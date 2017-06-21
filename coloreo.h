@@ -36,6 +36,7 @@ public:
 	int degree(int nodo);
 	void add_to_clique(int v1);
 	void del_from_clique(int v1);
+	void del_special();
 private:
 	vector< vector<int> > vecinos;
 	vector <int> axis;

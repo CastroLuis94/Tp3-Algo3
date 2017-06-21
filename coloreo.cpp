@@ -29,14 +29,57 @@ grafo::grafo(vector< vector<int> >& vs){
 		axis = ejes;
 }
 
-void grafo::del_from_clique(int v1) {
-	axis.erase(remove(axis.begin(),axis.end(), v1), axis.end());
-	for (int i = 0; i < axis.size() + 1; ++i){
-		if(esta(vecinos[i],v1)){
-			vecinos[i].erase(remove(vecinos[i].begin(),vecinos[i].end(), v1), vecinos[i].end());
+vector<int> filtrar(vector<int> axis,int v1){
+	int i = 0;
+	vector<int> res;
+	while(i < axis.size()){
+		if(axis.at(i) != v1){
+			res.push_back(axis.at(i));
 		}
+		i++;
 	}
+	return res;
 }
+
+void filtrar(vector< vector < int > >& vecinos,int v1){
+	int i = 0;
+	vector<vector< int > > res;
+	while(i < vecinos.size()){
+		vecinos.at(i) = filtrar(vecinos.at(i),v1);
+		i++;
+	}
+	return ;
+}
+
+int maximo(vector<int> axis){
+	int res = 0;
+	int i = 0;
+	while(i < axis.size()){
+		if(res < axis[i]){
+			res = axis[i];
+		}
+		i++;
+	}
+	return res;
+}
+
+void grafo::del_from_clique(int v1) {
+	axis = filtrar(axis,v1);
+	filtrar(vecinos,v1);
+	//vecinos.resize(maximo(axis)+1);
+}
+void grafo::del_special() {
+	axis.pop_back();
+	int i = 0;
+	while(i < vecinos.size()){
+		if (vecinos[i].size() > 0 ){
+			vecinos[i].pop_back();
+		}
+		i++;
+	}
+	//vecinos.resize(maximo(axis)+1);
+}
+
 
 void grafo::add_edge(int v1, int v2) {
 	if (not esta(vecinos[v1],v2)){

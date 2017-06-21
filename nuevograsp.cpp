@@ -130,30 +130,11 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
     vector <int> listaNodos = g.ejes();
-//    int indiceprimerNodo = rand() % (listaNodos.size());
-//    int primerNodo = listaNodos[indiceprimerNodo];
-//    int Crecimiento = 0;
-//    vector <int> nodosDisponibles = g.get_neigh(primerNodo);
     vector <int> nodosDisponibles:;
-//    vector <vector < int > > aux;
     vector <int> nodos;
-//    nodos.push_back(primerNodo);
-//    aux.resize(primerNodo+ 1);
     grafo mejorClique(aux,nodos);
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
-/*    while(Crecimiento < listaNodos.size()/2 and nodosDisponibles.size() > 0){
-        int cont = 0;
-        while(cont < nodosDisponibles.size()) {
-            if(not esta1(grafoActual.ejes(),nodosDisponibles.at(cont))){
-                nodoAAgregar = nodosDisponibles.at(cont);
-            }
-            cont ++;
-        }
-        grafoActual.add_to_clique(nodoAAgregar);
-        nodosDisponibles = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
-    }
-*/  maxfrontera = frontera(original,g);
     int cont = 0;
     grafo grafoaux(aux,grafoActual.ejes());
     grafoaux = grafoActual;
@@ -227,6 +208,11 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
           grafoaux.add_to_clique(get<1>(aux2));
           maxfrontera = get<2>(aux2);  
         }
+        else
+        {
+            grafoaux.del_from_clique(get<1>(aux2));
+            maxfrontera = get<2>(aux2);
+        }
         ++contador
        /* if (mayorCreciente >= maxfrontera and mayorCreciente >= mayorDecreciente){
             grafoaux.add_to_clique(nodosDisponibles.at(nodomayorCreciente));
@@ -243,7 +229,7 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
         */
     }
 
-    return grafoaux.ejes();
+    return grafoaux;
 }
 
 
@@ -256,52 +242,42 @@ vector <int> grasp(grafo g, int& maxfrontera){
     int nodoElegido = listaNodos[indiceNodoElegido];
     maxfrontera = g.degree(nodoElegido);
     vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
-    /*int i = 0;
-    while(i < nodoPorGrado.size()){
-        cout << "imprimiento nodo" << endl;
-        cout << nodoPorGrado[i]+1 << endl;
-        cout << "imprimiento grado del nodo" << endl;
-         cout << (g.degree(nodoPorGrado[i]+1)) << endl;
-         i++;
-    }
-   */
-    //cout << maximoNodo << endl;
-    //mostrar(nodosDisponibles);
     vector <vector < int > > aux;
     vector <int> nodos;
-    //cout << "yolo2" <<endl;
-    nodos.push_back(nodoElegido);
-    aux.resize(nodoElegido + 1);
-    // cout << "yolo3" <<endl;
+    nodos.push_back(maximoNodo);
+    aux.resize(maximoNodo + 1);
     grafo mejorClique(aux,nodos);
-   
-    //mostrar(mejorClique.ejes());
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
+    vector<int> nodosDisponiblesAux;
+    grafo grafoActualAux = grafoActual;
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
+        grafo copia = grafoActual;
         while(i < nodosDisponibles.size()){
-            if (g.degree(nodosDisponibles.at(i)) > maximoGrado and not esta1(grafoActual.ejes(),nodosDisponibles.at(i))){
-                nodoAAgregar = nodosDisponibles.at(i);
-                maximoGrado = g.degree(nodosDisponibles.at(i));
+            int nodoAAgregar = nodosDisponibles[i];
+            grafoActualAux = grafoActual;
+            copia.add_to_clique(nodoAAgregar);
+            int fronteraDeLaCopia = frontera(copia,g);
+            if (fronteraDeLaCopia >= maxfrontera){
+                nodosDisponiblesAux = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
+                maxfrontera = fronteraDeLaCopia;
+                grafoActualAux = copia;
             }
             i++;
+            copia.del_special();
         }
-        
-        grafoActual.add_to_clique(nodoAAgregar);
-        /*mostrar(grafoActual.ejes());
-        cout << "valores de las fronteras" <<endl;
-        cout << frontera(grafoActual,g) <<endl;
-         cout << maxfrontera <<endl;
-        */
-        if (maxfrontera < frontera(grafoActual,g)){
-            mejorClique = grafoActual;
-            maxfrontera = frontera(grafoActual,g);
+        if(nodosDisponibles.size() == nodosDisponiblesAux.size()){
+            break;
         }
-        nodosDisponibles = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
+        grafoActual = grafoActualAux;
+        nodosDisponibles = nodosDisponiblesAux;
     }
-    return mejorClique.ejes();
+    grafoActualAux = busquedalocal(grafoActual,g)
+
+
+    return grafoActual;
 }
 
 
