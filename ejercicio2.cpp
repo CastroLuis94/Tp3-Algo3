@@ -118,7 +118,6 @@ int frontera(grafo&g, vector<int>& nodos){
     for(int j =0; j< nodos.size(); j++ ){
         for(int i =1; i < vertices+1; i++){        
          if(((esta(i, g.get_neigh(nodos[j]))== true) and (esta(i, nodos) == false)) and(i != nodos[j])){ 
-                    
              res++;
          } 
         }
@@ -131,7 +130,8 @@ int frontera(grafo&g, vector<int>& nodos){
 
 vector<vector <int> > Conjunto_de_partes(int n){
     vector<vector<int > > res;
-    for(int i = 0; i < (1 << n) ; i++){
+    int repeticiones  =( 1 << n);
+    for(int i = 0; i < repeticiones ; i++){
         vector<int> parte_enesima;
         int auxiliar = i;
         /*if((auxiliar%2) == 1){

@@ -130,8 +130,9 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
     vector <int> listaNodos = g.ejes();
-    vector <int> nodosDisponibles:;
+    vector <int> nodosDisponibles;
     vector <int> nodos;
+     vector <vector <int> > aux;
     grafo mejorClique(aux,nodos);
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
@@ -143,9 +144,10 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
     int nodoAeliminar;
     tuple <int, int, bool> aux2;
     vector< tuple< int, int,bool > > guardar;
+    int contador = 0;
     while (contador < g.tamano()*2){
         while (cont < nodosDisponibles.size()){
-            flag = false
+            flag = false;
             grafoaux.add_to_clique(nodosDisponibles.at(cont));
             if (guardar.size() < 5){
                 if(frontera(grafoaux,g) > maxfrontera){
@@ -155,14 +157,14 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
             }
             else
             {
-                for (int i = 0; i < guardar.size() and flag = false ; ++i)
+                for (int i = 0; i < guardar.size() and flag == false ; ++i)
                 {
                     if (frontera(grafoaux,g) > get<2>(guardar[i]) )
                     {
                         //aux2 = make_tuple(cont,frontera(grafoaux,g),true);
-                        guardar[i].get<1> = cont;
-                        guardar[i].get<2> = frontera(grafoaux,g);
-                        guardar[i].get<1> = true;
+                        get<0>(guardar[i]) = cont;
+                        get<1>(guardar[i]) = frontera(grafoaux,g);
+                        get<2>(guardar[i]) = true;
                         flag = true;
                     }
                 }
@@ -183,15 +185,15 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
             }
             else
             {
-                for (int i = 0; i < guardar.size() and flag = false ; ++i)
+                for (int i = 0; i < guardar.size() and flag == false ; ++i)
                 {
                     if (frontera(grafoaux,g) > get<2>(guardar[i]) )
                     {
                         //aux2 = make_tuple(nodoAeliminar,frontera(grafoaux,g),false);
                         //guardar.push_back(aux2);
-                        guardar[i].get<1> = nodoAeliminar;
-                        guardar[i].get<2> = frontera(grafoaux,g);
-                        guardar[i].get<3> = false;
+                        get<0>(guardar[i]) = nodoAeliminar;
+                        get<1>(guardar[i]) = frontera(grafoaux,g);
+                        get<2>(guardar[i]) = false;
                         flag = true;
                     }
                 }
@@ -199,21 +201,21 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
             grafoaux.add_to_clique(nodoAeliminar);
             cont ++;
         }
+        int indice = rand() % guardar.size();
+        aux2 = guardar[indice];
 
-        aux2 = rand() % (guardar);
 
-
-        if (get<3>(true))
+        if (get<2>(aux2))
         {
-          grafoaux.add_to_clique(get<1>(aux2));
-          maxfrontera = get<2>(aux2);  
+          grafoaux.add_to_clique(get<0>(aux2));
+          maxfrontera = get<1>(aux2);  
         }
         else
         {
-            grafoaux.del_from_clique(get<1>(aux2));
-            maxfrontera = get<2>(aux2);
+            grafoaux.del_from_clique(get<0>(aux2));
+            maxfrontera = get<1>(aux2);
         }
-        ++contador
+        ++contador;
        /* if (mayorCreciente >= maxfrontera and mayorCreciente >= mayorDecreciente){
             grafoaux.add_to_clique(nodosDisponibles.at(nodomayorCreciente));
             maxfrontera = mayorCreciente;
@@ -229,7 +231,7 @@ vector <int> busquedalocal(grafo original,grafo g, int& maxfrontera){
         */
     }
 
-    return grafoaux;
+    return grafoaux.ejes();
 }
 
 
@@ -244,8 +246,8 @@ vector <int> grasp(grafo g, int& maxfrontera){
     vector <int> nodosDisponibles = g.get_neigh(nodoElegido);
     vector <vector < int > > aux;
     vector <int> nodos;
-    nodos.push_back(maximoNodo);
-    aux.resize(maximoNodo + 1);
+    nodos.push_back(nodoElegido);
+    aux.resize(nodoElegido + 1);
     grafo mejorClique(aux,nodos);
     grafo grafoActual(aux,nodos);
     int nodoAAgregar;
@@ -274,10 +276,11 @@ vector <int> grasp(grafo g, int& maxfrontera){
         grafoActual = grafoActualAux;
         nodosDisponibles = nodosDisponiblesAux;
     }
-    grafoActualAux = busquedalocal(grafoActual,g)
+    vector<vector<int> > basura;
+   
+    grafoActualAux = grafo(busquedalocal(grafoActual,g,maxfrontera));
 
-
-    return grafoActual;
+    return grafoActual.ejes();
 }
 
 

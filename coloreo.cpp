@@ -165,3 +165,9 @@ void grafo::add_to_clique(int v1){
 	axis.push_back(v1);
 }
 
+grafo::grafo(vector<int>  vs){
+		int i = 0;
+		while(i < vs.size()){
+			add_to_clique(vs[i]);
+		}
+	}

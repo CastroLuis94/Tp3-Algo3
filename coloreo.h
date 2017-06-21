@@ -15,6 +15,7 @@ using namespace std;
 class grafo {
 public:
 	grafo(vector< vector<int> >& vs);
+	grafo(vector<int> vs);
 	grafo(const grafo& g, vector<int> nodos){
 		vecinos = g.vecinos;
 		axis = nodos;
