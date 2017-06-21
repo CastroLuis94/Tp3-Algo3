@@ -134,16 +134,8 @@ vector<vector <int> > Conjunto_de_partes(int n){
     for(int i = 0; i < repeticiones ; i++){
         vector<int> parte_enesima;
         int auxiliar = i;
-        /*if((auxiliar%2) == 1){
-            parte_enesima.push_back(1);
-            auxiliar--;
-        }*/ //Ahora son todos pares.
-        for(int j  = n-1; j >= 0; j--){//puede ser que deba ser modificado
-            //cout << "i : " << i << "j :" << j<< endl;                      
-            //if(((auxiliar % (1 << j)) == 0) and (auxiliar > 0) and ((auxiliar == i) or ((auxiliar< i) and (auxiliar > 1) )) ){
-            
-            if(auxiliar >= (1<<j)){  
-            //cout <<"paso"<< "i : " << i << "j :" << j<< endl;              
+        for(int j  = n-1; j >= 0; j--){
+            if(auxiliar >= (1<<j)){               
                 parte_enesima.push_back(j+1);
                 auxiliar = auxiliar -(1 << j); 
             }
@@ -152,8 +144,6 @@ vector<vector <int> > Conjunto_de_partes(int n){
             res.push_back(parte_enesima);
         }
     }
-    //vector<int> vacio;
-    //res.push_back(vacio);
     return res;
 }
 

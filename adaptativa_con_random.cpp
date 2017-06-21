@@ -128,8 +128,8 @@ vector< vector < int > > levantarAristas(int vertices,int cantAristas){
 
 
 
-
 /*
+
 grafo constructiva_con_random(grafo g, int& maxfrontera){
     vector <int> nodoPorGrado = g.nodes_by_degree();
     int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
@@ -174,8 +174,7 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
 grafo constructiva_con_random(grafo g, int& maxfrontera){
     vector <int> nodoPorGrado = g.nodes_by_degree();
     int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
-    maxfrontera = g.degree(maximoNodo);
-    //vector<int> maximos(3, 0);
+    maxfrontera = g.degree(maximoNodo);    
     //tenemos el nodo de mayor grado. maxfrontera comienza con sus vecinos como frontera maxima.
     vector <int> nodosDisponibles = g.get_neigh(maximoNodo);//vemos los vecinos del nodo de mayor frontera....(el vecindario esta conformado por los vecinos del de mayor grado)
     vector <vector < int > > aux;//en aux guardo grafo nuevo
@@ -186,7 +185,8 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
     grafo grafoActual(aux,nodos);//genero un grafo vacio con maximo + 1 posiciones. 
     int nodoAAgregar;
     vector<int> nodosDisponiblesAux;
-    grafo grafoActualAux = grafoActual;
+    grafo grafoActualAux = grafoActual;   
+    //int j = 0; 
     while (nodosDisponibles.size() > 0 ){//mientras haya un nodo que fue vecino al primero que  vi.(mientras no sea igual a los aux.)
         int i = 0;
         int maximoGrado = 0;
@@ -206,18 +206,27 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
         for(int i = 0; i < 3; i++){
             elecciones.push_back(fronteras[i]);
         }
-        int indice = rand() % elecciones.size(); 
+        srand(time(NULL));        
+        int indice = rand() % elecciones.size();
+        //cout << indice << endl;
         if(get<0>(elecciones[indice]) >= maxfrontera){
-            nodosDisponiblesAux = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));//los vecimos son los que estan en disponibles aux
-            maxfrontera = get<1>(elecciones[indice]);//actualizo la frontera
+            nodosDisponiblesAux = interseccion(nodosDisponibles,g.get_neigh(nodosDisponibles[get<1>(elecciones[indice])]));//los vecimos son los que estan en disponibles aux
+            grafoActualAux = grafoActual;
+            copia.add_to_clique(nodosDisponibles[get<1>(elecciones[indice])]);
+           // cout << "llega" << endl;
+            maxfrontera = get<0>(elecciones[indice]);//actualizo la frontera            
             grafoActualAux = copia;//actualizo el grafoaux
-        }
+            copia.del_special();
+        }        
         if(nodosDisponibles.size() == nodosDisponiblesAux.size()){
             break;
         }
+        //cout << "llega" << endl;
         grafoActual = grafoActualAux;
         nodosDisponibles = nodosDisponiblesAux;
-    }
+        //j++;
+        //cout << "iteracion"<< j << endl;
+        }
     return grafoActual;
 }
 

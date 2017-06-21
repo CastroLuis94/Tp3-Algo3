@@ -77,7 +77,7 @@ void grafo::del_special() {
 		}
 		i++;
 	}
-	//vecinos.resize(maximo(axis)+1);
+	vecinos.resize(maximo(axis)+1);
 }
 
 

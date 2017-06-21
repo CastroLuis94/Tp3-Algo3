@@ -95,11 +95,12 @@ grafo constructiva(grafo g, int& maxfrontera){
     vector <int> nodos;
     nodos.push_back(maximoNodo);
     aux.resize(maximoNodo + 1);
-    grafo mejorClique(aux,nodos);
     grafo grafoActual(aux,nodos);
+    grafo mejorClique(aux,nodos);
     int nodoAAgregar;
     vector<int> nodosDisponiblesAux;
     grafo grafoActualAux = grafoActual;
+    grafo copia = grafoActual;
     while (nodosDisponibles.size() > 0 ){
         int i = 0;
         int maximoGrado = 0;
@@ -108,22 +109,26 @@ grafo constructiva(grafo g, int& maxfrontera){
             int nodoAAgregar = nodosDisponibles[i];
             grafoActualAux = grafoActual;
             copia.add_to_clique(nodoAAgregar);
-            int fronteraDeLaCopia = frontera(copia,g);
-            if (fronteraDeLaCopia >= maxfrontera){
+            if (frontera(copia,g) >= maxfrontera){
                 nodosDisponiblesAux = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));
-                maxfrontera = fronteraDeLaCopia;
-                grafoActualAux = copia;
+                maxfrontera = frontera(copia,g);
+                mejorClique = copia;
             }
             i++;
             copia.del_special();
         }
-        if(nodosDisponibles.size() == nodosDisponiblesAux.size()){
+        //mostrar(nodosDisponibles);
+        grafoActual = mejorClique;
+        if(nodosDisponibles == nodosDisponiblesAux){
             break;
         }
-        grafoActual = grafoActualAux;
         nodosDisponibles = nodosDisponiblesAux;
+        //mostrar(nodosDisponibles);
+        
+        
     }
-    return grafoActual;
+    
+    return mejorClique;
 }
 
 
