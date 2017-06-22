@@ -57,6 +57,34 @@ vector<int> interseccion(vector<int>& nodosDisponibles, vector<int> vecinos){
     return res;
 }
 
+vector<int> actualizar(grafo g ,vector<int> nodosUsados){
+    vector<int> res;
+    if (nodosUsados.size() == 1){
+        //cout << "actualizar1" << endl;
+        res = g.get_neigh(nodosUsados[0]);
+    }
+    else
+    {   
+        //cout << "actualizar2" << endl;
+        if(nodosUsados.size() == 0){
+            res = g.ejes();
+        }
+        else
+        {   
+            //cout << "actualizar3" << endl;
+            res = g.get_neigh(nodosUsados[0]);
+            int i = 1;
+            while(i < nodosUsados.size()){
+               //cout << "actualizar3-2" << endl;
+                res = interseccion(res,g.get_neigh(nodosUsados[i]));
+                ++i;
+            }
+        }
+    }
+    return res;
+}
+
+
 void mostrar(vector<int> vs){
     int i = 0;
     while(i < vs.size()){
@@ -118,7 +146,7 @@ vector <int> busquedalocal(grafo g, int& maxfrontera){
 	grafoaux = grafoActual;
 	bool fin = false;
 	int nodoAeliminar;
-	while (fin == false ){
+	/*while (fin == false ){
 		//cout << "yolo0" << endl;
 		mayorDecreciente = 0;
     	mayorCreciente = 0;
@@ -138,14 +166,7 @@ vector <int> busquedalocal(grafo g, int& maxfrontera){
 			//cout << grafoaux.tamano() << endl;
 			//cout << cont << endl;
 			nodoAeliminar = grafoaux.ejes()[0];
-		//	cout << "cantidad ejes original:" ;
-		//	mostrar(grafoaux.ejes());
-        //   cout << "grados:";
-		//	cout << grafoaux.degrees() << endl;
-        //    vector <int> testeo2 = grafoaux.get_neigh(nodoAeliminar);
-        //    cout << "vecinos de eliminar son:";
-        //    mostrar(testeo2);
-            //mostrar(grafoaux.ejes()[0].get_neigh());
+
 			grafoaux.del_from_clique(nodoAeliminar);
 		//	cout << "desp de borrar:" ;
 		//	mostrar(grafoaux.ejes());
@@ -182,7 +203,54 @@ vector <int> busquedalocal(grafo g, int& maxfrontera){
 		//	cout << "termine" << endl;
 		}
 
-	}
+	}*/
+        while (fin == false ){
+        //cout << "deberia terminar?:" ;
+        cout << fin << endl;
+        //cout << "llegue4"<< endl;
+        mayorDecreciente = 0;
+        mayorCreciente = 0;
+        while (cont < nodosDisponibles.size()){
+            grafoaux.add_to_clique(nodosDisponibles.at(cont));
+            if(frontera(grafoaux,g) > mayorCreciente){
+                mayorCreciente = frontera(grafoaux,g);
+                nodomayorCreciente = cont;
+            }
+            grafoaux.del_from_clique(nodosDisponibles.at(cont));
+            cont ++;
+        }
+        cont = 0;
+        while (cont < grafoaux.tamano()) {
+            nodoAeliminar = grafoaux.ejes()[0];
+            grafoaux.del_from_clique(nodoAeliminar);
+            if (frontera(grafoaux,g) > mayorDecreciente){
+                mayorDecreciente = frontera(grafoaux,g);
+                nodomayorDecreciente = nodoAeliminar;
+            }
+            grafoaux.add_to_clique(nodoAeliminar);
+            cont ++;
+        }
+        if (mayorCreciente > maxfrontera and mayorCreciente >= mayorDecreciente){
+              //  cout << "llegue5a"<< endl;
+            grafoaux.add_to_clique(nodosDisponibles.at(nodomayorCreciente));
+            maxfrontera = mayorCreciente;
+            nodosDisponibles = interseccion(nodosDisponibles,g.get_neigh(nodoAAgregar));        
+        }
+        else if (mayorDecreciente > maxfrontera) {
+               // cout << "llegue5b"<< endl;     
+                grafoaux.del_from_clique(nodomayorDecreciente);
+               // cout << "llegue5b"<< endl;       
+                maxfrontera = mayorDecreciente;
+                nodosDisponibles =actualizar(g,grafoaux.ejes());
+               //  cout << "llegue5b3"<< endl;      
+        }
+        else
+        {
+           // cout << "llegue5c"<< endl;
+            fin = true;
+            // cout << "llegue5c"<< endl;
+        }
+    }
 	return grafoaux.ejes();
 }
 
