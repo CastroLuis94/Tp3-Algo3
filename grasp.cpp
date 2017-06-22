@@ -220,6 +220,7 @@ vector <int> busquedalocal(grafo g, int& maxfrontera, grafo construido){
         }
 
     }
+
     return grafoaux.ejes();
 }
 
@@ -228,11 +229,11 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
     vector <int> listaNodos = g.ejes();
     vector <int> primerosNodos;
     while(primerosNodos.size() < ( ( g.ejes().size() ) * 2) ){
-        primerosNodos.push_back(listaNodos[rand() % (listaNodos.size()+1)]);
+        primerosNodos.push_back(listaNodos.at(rand() % (listaNodos.size())));
     }
     int recorredor = 0;
     int nodoElegido;
-    int mejorFrontera;
+    int mejorFrontera = 0;
     vector <vector < int > > basura;
     vector <int> basura1;
     grafo cliqueResultado(basura,basura1);
@@ -305,6 +306,10 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
             cliqueResultado = grafoActual;
         }
     }
+    cout << "imprimo la respuesta del contructivo con random" <<endl;
+    cout << mejorFrontera << " ";
+    cout << cliqueResultado.tamano() << " ";
+    mostrar(cliqueResultado.ejes());
     return cliqueResultado;
 }
 
@@ -380,11 +385,11 @@ int main(){
     
     //mostrar(Conjunto_de_partes());
     int maxfrontera = 0;
-    cout << "yolo" <<endl;
+    //cout << "yolo" <<endl;
     grafo res2 = constructiva_con_random(g,maxfrontera);
-    cout << "yolo1" <<endl;
+    cout << "el constructivo con random terminó y voy a entrar al local" <<endl;
     vector <int> res = busquedalocal(g,maxfrontera,res2);
-    cout << "yolo2" <<endl;
+    //cout << "yolo2" <<endl;
     //cout << "yolo" <<endl;
     cout << maxfrontera << " ";
     cout << res.size() << " ";
