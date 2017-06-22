@@ -42,7 +42,7 @@ def generador_arbol(grafo):
         union = random.sample(grafo, 1)[0]
         res.append(Tupla(union,nodo))
         grafo.remove(union)
-        usados.append(nodo)
+        usados.append(union)
     return res
 
 def generar_grafo_conexo(grafo,porcentaje):
