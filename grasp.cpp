@@ -224,21 +224,10 @@ vector <int> busquedalocal(grafo g, int& maxfrontera, grafo construido){
     return grafoaux.ejes();
 }
 
-grafo constructiva_con_random(grafo g, int& maxfrontera){
-    srand(time(NULL)); 
-    vector <int> listaNodos = g.ejes();
-    vector <int> primerosNodos;
-    while(primerosNodos.size() < ( ( g.ejes().size() ) * 2) ){
-        primerosNodos.push_back(listaNodos.at(rand() % (listaNodos.size())));
-    }
+grafo constructiva_con_random(grafo g,int nodoElegido ,int& maxfrontera){
+   
     int recorredor = 0;
-    int nodoElegido;
     int mejorFrontera = 0;
-    vector <vector < int > > basura;
-    vector <int> basura1;
-    grafo cliqueResultado(basura,basura1);
-    while(recorredor < primerosNodos.size()){
-        nodoElegido = primerosNodos[recorredor];
         maxfrontera = g.degree(nodoElegido);
         vector <int> nodosDisponibles = g.get_neigh(nodoElegido);   
     //vemos los vecinos del nodo random elegido...(el vecindario esta conformado por los vecinos del de mayor grado)
@@ -274,7 +263,7 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
             //cout << floor(4/10) << endl;
             porcentaje = floor((nodosDisponibles.size()/10)*3);
             if(porcentaje == 0){
-            porcentaje = 1;    
+                porcentaje = 1;    
             }        
             for(float i = 0; i < porcentaje; i++){
                 elecciones.push_back(fronteras[i]);
@@ -299,18 +288,9 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
             nodosDisponibles = nodosDisponiblesAux;
             //j++;
             //cout << "iteracion"<< j << endl;
-            }
-        recorredor++;
-        if(maxfrontera > mejorFrontera){
-            mejorFrontera = maxfrontera;
-            cliqueResultado = grafoActual;
-        }
+            
     }
-    cout << "imprimo la respuesta del contructivo con random" <<endl;
-    cout << mejorFrontera << " ";
-    cout << cliqueResultado.tamano() << " ";
-    mostrar(cliqueResultado.ejes());
-    return cliqueResultado;
+    return grafoActual;
 }
 
 /*vector <int> grasp(grafo g, int& maxfrontera){
@@ -368,6 +348,47 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
 }
 */
 
+vector<int> grasp(grafo g, int& maximaFrontera){
+    srand(time(NULL)); 
+    vector <int> listaNodos = g.ejes();
+    vector <int> primerosNodos;
+    vector <vector <int> > basura;
+    vector <int> basura1;
+    grafo res(basura,basura1);
+    while(primerosNodos.size() < ( ( g.ejes().size() ) * 2) ){
+        primerosNodos.push_back(listaNodos.at(rand() % (listaNodos.size())));
+    }
+
+    int indice = 0;
+    while(indice < primerosNodos.size()){
+        int maxfronteraAux = 0;
+        int primerNodo = primerosNodos[indice];
+        grafo conLaConstructiva = constructiva_con_random(g,primerNodo,maxfronteraAux);
+        int maxfronteraAux2 = 0;
+
+        /*
+        Parte comentada hasta que el local funcione.
+        grafo conElLocal = busquedalocal(g,maxfronteraAux2,conLaConstructiva);
+        if (maxfronteraAux > maximaFrontera and maxfronteraAux > maxfronteraAux2){
+            maximaFrontera = maxfronteraAux;
+            res = conLaConstructiva;
+        }
+        if(maxfronteraAux2 > maximaFrontera and maxfronteraAux >= maxfronteraAux2){
+            maximaFrontera = maxfronteraAux2;
+            res = conElLocal;
+        }
+        
+        */
+        if (maxfronteraAux > maximaFrontera and maxfronteraAux > maxfronteraAux2){
+            maximaFrontera = maxfronteraAux;
+            res = conLaConstructiva;
+        }
+        indice++;
+    }
+    return res.ejes();
+
+}
+
 
 int main(){
 
@@ -386,9 +407,7 @@ int main(){
     //mostrar(Conjunto_de_partes());
     int maxfrontera = 0;
     //cout << "yolo" <<endl;
-    grafo res2 = constructiva_con_random(g,maxfrontera);
-    cout << "el constructivo con random terminó y voy a entrar al local" <<endl;
-    vector <int> res = busquedalocal(g,maxfrontera,res2);
+    vector <int> res = grasp(g,maxfrontera);
     //cout << "yolo2" <<endl;
     //cout << "yolo" <<endl;
     cout << maxfrontera << " ";
