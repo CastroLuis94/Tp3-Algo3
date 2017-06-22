@@ -170,17 +170,22 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
     }
     return grafoActual;
 }
-*/
+*///Devuelve grafo -Bien
+//Toma nodo random de los del arreglo -Bien
+// Toma el 30% de los vecinos 
+
 grafo constructiva_con_random(grafo g, int& maxfrontera){
-    vector <int> nodoPorGrado = g.nodes_by_degree();
-    int maximoNodo = nodoPorGrado[nodoPorGrado.size() - 1] + 1 ;
-    maxfrontera = g.degree(maximoNodo);    
-    //tenemos el nodo de mayor grado. maxfrontera comienza con sus vecinos como frontera maxima.
-    vector <int> nodosDisponibles = g.get_neigh(maximoNodo);//vemos los vecinos del nodo de mayor frontera....(el vecindario esta conformado por los vecinos del de mayor grado)
+    srand(time(NULL)); 
+    vector <int> listaNodos = g.ejes();
+    int indiceNodoElegido = rand() % (listaNodos.size());
+    int nodoElegido = listaNodos[indiceNodoElegido];
+    maxfrontera = g.degree(nodoElegido);
+    vector <int> nodosDisponibles = g.get_neigh(nodoElegido);   
+   //vemos los vecinos del nodo random elegido...(el vecindario esta conformado por los vecinos del de mayor grado)
     vector <vector < int > > aux;//en aux guardo grafo nuevo
     vector <int> nodos;//nodos comienza vacio(formo la clique aqui?)
-    nodos.push_back(maximoNodo);//aqui agregamos nodos de la clique
-    aux.resize(maximoNodo + 1);//aux tiene tantos nodos como vecinos.
+    nodos.push_back(nodoElegido);//aqui agregamos nodos de la clique
+    aux.resize(nodoElegido + 1);//aux tiene tantos nodos como vecinos.
     //grafo mejorClique(aux,nodos);
     grafo grafoActual(aux,nodos);//genero un grafo vacio con maximo + 1 posiciones. 
     int nodoAAgregar;
@@ -203,7 +208,15 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
         sort(fronteras.begin(), fronteras.end());//me ordena losnodos por el de menos al que mas frontera aumenta.
         reverse(fronteras.begin(), fronteras.end());
         vector<tuple<int, int> >elecciones;
-        for(int i = 0; i < 3; i++){
+        float porcentaje;
+        
+        //cout << nodosDisponibles.size() << endl; 
+        //cout << floor(4/10) << endl;
+        porcentaje = floor((nodosDisponibles.size()/10)*3);
+        if(porcentaje == 0){
+        porcentaje = 1;    
+        }        
+        for(float i = 0; i < porcentaje; i++){
             elecciones.push_back(fronteras[i]);
         }
         srand(time(NULL));        
