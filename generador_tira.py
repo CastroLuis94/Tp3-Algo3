@@ -87,9 +87,9 @@ def generador_tira_de_cliques(n, tam_tira, frontera_maxima, clique=None):
 def generar_clique(nodos):
     res = []
     for i in nodos:
-        for j in nodos:
-            if i != j:
-                res.append(Tupla(i, j))
+        for k in nodos:
+            if (k > i):
+                res.append(Tupla(i, k))
     return res
 
 
