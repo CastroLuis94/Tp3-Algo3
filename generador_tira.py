@@ -1,12 +1,13 @@
 import random
+from math import sqrt
 
 from rosquilla import Tupla
 
 
-def frontera_clique(g, n, clique):
+def frontera_clique(g, tam_grafo, clique):
     clique_aux = generar_clique(clique)
-    adyacencia = [set() for i in range(n + 1)]
-    ady_clique = [set() for i in range(n + 1)]
+    adyacencia = [set() for _ in range(tam_grafo + 1)]
+    ady_clique = [set() for _ in range(tam_grafo + 1)]
     for i in g:
         adyacencia[i.c1].add(i.c2)
         adyacencia[i.c2].add(i.c1)
@@ -25,8 +26,8 @@ def generador_tira_de_cliques(n, tam_tira, frontera_maxima, clique=None):
     g = []
     nodos = [i for i in range(1, n + 1)]
     random.shuffle(nodos)
-
-    tam_clique = len(clique) or 4
+    clique = clique or []
+    tam_clique = len(clique) or int(sqrt(frontera_maxima))
 
     if clique:
         clique_aux = clique
@@ -45,40 +46,43 @@ def generador_tira_de_cliques(n, tam_tira, frontera_maxima, clique=None):
     for i in tira:
         nodos.remove(i)
 
-    random.shuffle(tira)
+    # random.shuffle(tira)
+    # random.shuffle(tira)
 
     clique = generar_clique(clique_aux)  # Deberia ser lista de tuplas
     g += clique
+    frontera_actual = random.sample(tira, frontera_maxima)
+
     for i in range(frontera_maxima):
-        w = tira.pop()
+        w = frontera_actual.pop()
         v = clique_aux[(i % tam_clique)]
         g.append(Tupla(v, w))
     cliques = []
+
     while nodos:
-        tam = random.randint(1, tam_clique)
+        tam = random.randint(1, tam_clique - 1)
+        frontera = frontera_maxima - 1
+        # tam = 5
         c = nodos[:tam]
         clique.append(c)
         for i in c:
-            for j in c:
-                if j != i:
-                    g.append(Tupla(j, i))
-        for i in c:
             nodos.remove(i)
         cliques.append(c)
-        frontera = random.randint(1, frontera_maxima - 1)
+        clique_actual = generar_clique(c)
+
+        for i in clique_actual:
+            g.append(i)
         for i in range(frontera):
             if not tira:
                 break
             v = tira.pop()
-            w = c[i % len(c)]
+            w = random.choice(c)
             g.append(Tupla(v, w))
-    if nodos:
-        v = nodos.pop()
-        for i in nodos[:frontera_maxima - 1]:
-            g.append(Tupla(v, i))
+
     for i in cliques:
         assert frontera_maxima > frontera_clique(g, n, i)
     assert frontera_maxima == frontera_clique(g, n, clique_aux)
+
     print(str(n) + " " + str(len(g)))
     for elem in g:
         print(elem)
@@ -94,10 +98,7 @@ def generar_clique(nodos):
 
 
 if __name__ == "__main__":
-    n = 300
-    tam_tira = 200  # mientras mas cercano sea este valor al n genera mas optimos locales valores puede generar
-
-    clique = [214, 23, 14, 2, 3]
-
-    frontera_maxima = 30
-    generador_tira_de_cliques(n, tam_tira, frontera_maxima, clique)
+    n = 2000
+    tam_tira = 500  # mientras mas cercano sea este valor al n genera mas optimos locales valores puede generar
+    frontera_maxima = 300
+    generador_tira_de_cliques(n, tam_tira, frontera_maxima)
