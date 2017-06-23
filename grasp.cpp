@@ -138,10 +138,10 @@ grafo busquedalocal(grafo g, int& maxfrontera, grafo& construido){
         bool fin = false;
         int nodoAeliminar;
         //cout << "nodos antes de hacer nada:";
-        mostrar(construido.ejes());
+        //mostrar(construido.ejes());
         while (fin == false ){
         //cout << "deberia terminar?:" ;
-        cout << fin << endl;
+        //cout << fin << endl;
         //cout << "llegue4"<< endl;
         mayorDecreciente = 0;
         mayorCreciente = 0;
@@ -279,35 +279,20 @@ vector<int> grasp(grafo g, int& maximaFrontera){
     }
 
     int indice = 0;
-    while(indice < primerosNodos.size()){
-        //cout << "grasp1" << endl;
+    while(indice < primerosNodos.size()){        
         int maxfronteraAux = 0;
         int primerNodo = primerosNodos[indice];
         grafo conLaConstructiva = constructiva_con_random(g,primerNodo,maxfronteraAux);
         int maxfronteraAux2 = 0;
 
         /*
-        Parte comentada hasta que el local funcione.*/
+        Parte  local .*/
         grafo conElLocal = busquedalocal(g,maxfronteraAux,conLaConstructiva);
-        if (maxfronteraAux > maximaFrontera ){
+        if (maxfronteraAux >= maximaFrontera ){
             maximaFrontera = maxfronteraAux;
             res = conElLocal;
             //cout << "grasp1a" << endl;
         }
-        /*if(maxfronteraAux2 > maximaFrontera and maxfronteraAux >= maxfronteraAux2){
-            maximaFrontera = maxfronteraAux2;
-            res = conElLocal;
-            cout << "grasp1b" << endl;
-        }
-        
-    
-        if (maxfronteraAux > maximaFrontera and maxfronteraAux > maxfronteraAux2){
-            maximaFrontera = maxfronteraAux;
-            res = conLaConstructiva;
-            cout << "grasp1c" << endl;
-        }
-        */
-        //cout << "subo indice grasp" << endl;
         indice++;
     }
     return res.ejes();

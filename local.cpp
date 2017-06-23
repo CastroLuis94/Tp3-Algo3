@@ -206,7 +206,7 @@ vector <int> busquedalocal(grafo g, int& maxfrontera){
 	}*/
         while (fin == false ){
         //cout << "deberia terminar?:" ;
-        cout << fin << endl;
+        //cout << fin << endl;
         //cout << "llegue4"<< endl;
         mayorDecreciente = 0;
         mayorCreciente = 0;
@@ -275,14 +275,14 @@ int main(){
 
 
     vector <int> res = busquedalocal(g,maxfrontera);
-    cout << "yolo" <<endl;
-    cout << "tamaño de la frontera es:";
-    cout << maxfrontera << " " << endl;
-    cout << "cantidad de nodos es:";
-    cout << res.size() << " " <<endl;
-    cout << "los nodos son:";
+    //cout << "yolo" <<endl;
+    //cout << "tamaño de la frontera es:";
+    cout << maxfrontera << " " ;
+    //cout << "cantidad de nodos es:";
+    cout << res.size() << " ";
+    //cout << "los nodos son:";
     mostrar(res);
-    cout << "" <<endl;
+    //cout << "" <<endl;
     
     return 0;
 }
