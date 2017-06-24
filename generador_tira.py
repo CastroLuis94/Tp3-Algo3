@@ -1,4 +1,5 @@
 import random
+import sys
 from math import sqrt
 
 from rosquilla import Tupla
@@ -51,10 +52,9 @@ def generador_tira_de_cliques(n, tam_tira, frontera_maxima, clique=None):
 
     clique = generar_clique(clique_aux)  # Deberia ser lista de tuplas
     g += clique
-    frontera_actual = random.sample(tira, frontera_maxima)
 
     for i in range(frontera_maxima):
-        w = frontera_actual.pop()
+        w = tira.pop()
         v = clique_aux[(i % tam_clique)]
         g.append(Tupla(v, w))
     cliques = []
@@ -98,7 +98,8 @@ def generar_clique(nodos):
 
 
 if __name__ == "__main__":
-    n = 2000
-    tam_tira = 500  # mientras mas cercano sea este valor al n genera mas optimos locales valores puede generar
-    frontera_maxima = 300
+    arg = sys.argv
+    n = int(arg[1])
+    tam_tira = int(arg[2])  # mientras mas cercano sea este valor al n genera mas optimos locales valores puede generar
+    frontera_maxima = int(arg[3])
     generador_tira_de_cliques(n, tam_tira, frontera_maxima)
