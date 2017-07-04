@@ -199,7 +199,7 @@ grafo constructiva_con_random(grafo g, int& maxfrontera){
         vector< tuple<int, int> > fronteras(nodosDisponibles.size(), make_tuple(maxfrontera, 0));//genero copia al actual
         while(i < nodosDisponibles.size()){//agrego el nodo que maximize la frontera.
             int nodoAAgregar = nodosDisponibles[i];
-            grafoActualAux = grafoActual;
+            //grafoActualAux = grafoActual;
             copia.add_to_clique(nodoAAgregar);
             fronteras[i] = make_tuple(frontera(copia,g), i);
             i++;
