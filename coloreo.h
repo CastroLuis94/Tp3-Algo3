@@ -20,6 +20,10 @@ public:
 		vecinos = g.vecinos;
 		axis = nodos;
 	}
+	grafo(vector<vector<int> > neigh, vector<int> nodos){
+		vecinos = neigh;
+		axis = nodos;
+	}
 	grafo& operator=(const grafo& other){
 		vecinos = other.vecinos;
 		axis = other.axis;
