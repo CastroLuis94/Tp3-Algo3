@@ -128,10 +128,10 @@ vector <int> busquedalocal(grafo g, int& maxfrontera){
     int mayorCreciente = maxfrontera;
     int nodomayorCreciente = 0;
     int cont = 0;
-    grafo grafoaux(aux,grafoActual.ejes());
+    //grafo grafoaux(aux,grafoActual.ejes());
     int mayorDecreciente = maxfrontera;
 	int nodomayorDecreciente = 0;
-	grafoaux = grafoActual;
+	grafo grafoaux = grafoActual;
 	bool fin = false;
 	int nodoAeliminar;
     while (fin == false){
